@@ -1,2 +1,85 @@
-# deepfinder_release
-definder release
+# DeepFinder (딥파인더)
+
+## Introduction
+딥파인더는 인공지능 딥러닝 알고리즘을 쉽게 활용할 수 있는 툴 셋입니다. 딥파인더를 이용하면 과거 데이터를 내려받고 자신만의 주식 알고리즘을 적용하여 훈련시킴으로써 주식 종목에 대한 인사이트를 얻을 수 있습니다.
+
+## Install
+
+## Tutorial
+
+메모장이나 선호하는 에디터를 이용하여 아래 코드를 작성합니다.
+
+
+```csharp
+
+class Model_100 : ClassModel {
+
+    Model_100() : base(100) {
+
+        Desc = "30일동안의 종가 데이터로 다음날 20% 이상 상승하는 종목을 훈련시킨다.";
+        Title = "Model 100";
+
+        Layers.Add(30); // Dense Layer
+        Layers.Add(20); // Dense Layer
+        Layers.Add(10); // Dense Layer
+
+        for(int i = 0; i < 30; ++i) {
+            AddFeature(CloseFrature(offset: -i));
+        }
+    }
+
+    int GetClass(CandleDataList candleDataList, int index) {
+        Candle c = candleDataList.GetCandle(index + 1);
+        Candle c1 = candleDataList.GetCandle(index);
+
+        // c : c1 = x : 100
+        // 다음날 20% 이상 상승이면 1를 리턴한다.
+        double x = c.Close * 100 / c1.Close;
+
+        if(20 < x) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+```
+model_100.cs 파일이름으로 저장합니다.
+이제 훈련을 시켜보겠습니다.
+```
+dftrainer --source ./Model_100.cs
+```
+
+
+```
+public enum CandleDataType
+{
+    Open, High, Low, Close, AvgPrice, Ratio, Volume, Amount
+}
+```
+특성들은 다음과 같습니다.
+
+* OpenFeature(int offset) : 시가
+* HighFeature(int offset) : 고가
+* LowFeature(int offset) : 저가
+* CloseFeature(int offset) : 종가
+* VolumeFeature(int offset) : 거래량
+* AccmBuyCountFeature(int offset) : 누적 매수량(일 데이타만 제공)
+* AccmSelCountFeature(int offset) : 누적 매도량(일 데이타만 제공)
+* StockCountFeature(int offset) : 주식수
+* ForeignCountFeature(int offset) : 외국인 보유 수량
+* ForeignRatioFeature(int offset) : 외국인 보유 비율
+* OrganBuyCountFeature(int offset) : 기관 매수 수량
+* OrganAccmBuyCountFeature(int offset) : 기관 누적 수량
+* VolumeRatioFeature(int offset) : 거래량 
+
++ BBandFeature(CandleDataType candleDataType, int period, int dev) : 볼린저밴드
++ CciFeature(int period, int offset) : CCI
++ MacdFeature(int optInFastPeriod, int optInSlowPeriod, int optInSignalPeriod, int offset) : Macd
++ ObvFeature(int offset) : Obv
++ RsiFeature(int period, int offset) : Rsi
++ SmaFeature(int period, int offset) : Sma
+
+
+
+

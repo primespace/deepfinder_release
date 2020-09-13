@@ -11,7 +11,6 @@
 
 
 ```csharp
-
 using DFCore;
 using ModelCore;
 using ModelCore.Base;
@@ -24,9 +23,9 @@ class MyModel : ClassModel {
 
         this.PeriodType = CandlePeriodType.D;
 
+        this.Layers.Add (32);
         this.Layers.Add (16);
         this.Layers.Add (8);
-        this.Layers.Add (4);
 
         this.Epochs = 100;
         this.BatchSize = 100;
@@ -37,6 +36,7 @@ class MyModel : ClassModel {
             AddFeature (new HighFeature (offset: -i));
             AddFeature (new LowFeature (offset: -i));
             AddFeature (new CloseFeature (offset: -i));
+            AddFeature (new VolumeFeature (offset: -i));
         }
     }
 
@@ -48,7 +48,7 @@ class MyModel : ClassModel {
         // 다음날 20% 이상 상승이면 1를 리턴한다.
         double x = (c.Close / c1.Close) * 100;
 
-        if (125 < x) {
+        if (120 < x) {
             return 1;
         } else {
             return 0;

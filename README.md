@@ -1,42 +1,54 @@
-# DeepFinder (µöÆÄÀÎ´õ)
+# DeepFinder (ë”¥íŒŒì¸ë”)
 
 ## Introduction
-µöÆÄÀÎ´õ´Â ÀÎ°øÁö´É µö·¯´× ¾Ë°í¸®ÁòÀ» ½±°Ô È°¿ëÇÒ ¼ö ÀÖ´Â Åø ¼ÂÀÔ´Ï´Ù. µöÆÄÀÎ´õ¸¦ ÀÌ¿ëÇÏ¸é °ú°Å µ¥ÀÌÅÍ¸¦ ³»·Á¹Þ°í ÀÚ½Å¸¸ÀÇ ÁÖ½Ä ¾Ë°í¸®ÁòÀ» Àû¿ëÇÏ¿© ÈÆ·Ã½ÃÅ´À¸·Î½á ÁÖ½Ä Á¾¸ñ¿¡ ´ëÇÑ ÀÎ»çÀÌÆ®¸¦ ¾òÀ» ¼ö ÀÖ½À´Ï´Ù.
+ë”¥íŒŒì¸ë”ëŠ” ì¸ê³µì§€ëŠ¥ ë”¥ëŸ¬ë‹ ì•Œê³ ë¦¬ì¦˜ì„ ì‰½ê²Œ í™œìš©í•  ìˆ˜ ìžˆëŠ” íˆ´ ì…‹ìž…ë‹ˆë‹¤. ë”¥íŒŒì¸ë”ë¥¼ ì´ìš©í•˜ë©´ ê³¼ê±° ë°ì´í„°ë¥¼ ë‚´ë ¤ë°›ê³  ìžì‹ ë§Œì˜ ì£¼ì‹ ì•Œê³ ë¦¬ì¦˜ì„ ì ìš©í•˜ì—¬ í›ˆë ¨ì‹œí‚´ìœ¼ë¡œì¨ ì£¼ì‹ ì¢…ëª©ì— ëŒ€í•œ ì¸ì‚¬ì´íŠ¸ë¥¼ ì–»ì„ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 
 ## Install
 
 ## Tutorial
 
-¸Þ¸ðÀåÀÌ³ª ¼±È£ÇÏ´Â ¿¡µðÅÍ¸¦ ÀÌ¿ëÇÏ¿© ¾Æ·¡ ÄÚµå¸¦ ÀÛ¼ºÇÕ´Ï´Ù.
+ë©”ëª¨ìž¥ì´ë‚˜ ì„ í˜¸í•˜ëŠ” ì—ë””í„°ë¥¼ ì´ìš©í•˜ì—¬ ì•„ëž˜ ì½”ë“œë¥¼ ìž‘ì„±í•©ë‹ˆë‹¤.
 
 
 ```csharp
 
-class Model_100 : ClassModel {
+using DFCore;
+using ModelCore;
+using ModelCore.Base;
 
-    Model_100() : base(100) {
+class MyModel : ClassModel {
 
-        Desc = "30ÀÏµ¿¾ÈÀÇ Á¾°¡ µ¥ÀÌÅÍ·Î ´ÙÀ½³¯ 20% ÀÌ»ó »ó½ÂÇÏ´Â Á¾¸ñÀ» ÈÆ·Ã½ÃÅ²´Ù.";
-        Title = "Model 100";
+    public MyModel () : base (100) {
+        this.Title = "MyModel";
+        this.Desc = "MyModel 100";
 
-        Layers.Add(30); // Dense Layer
-        Layers.Add(20); // Dense Layer
-        Layers.Add(10); // Dense Layer
+        this.PeriodType = CandlePeriodType.D;
 
-        for(int i = 0; i < 30; ++i) {
-            AddFeature(CloseFrature(offset: -i));
+        this.Layers.Add (16);
+        this.Layers.Add (8);
+        this.Layers.Add (4);
+
+        this.Epochs = 100;
+        this.BatchSize = 100;
+        this.EndOffset = 10;
+
+        for (int i = 0; i <= 60; ++i) {
+            AddFeature (new OpenFeature (offset: -i));
+            AddFeature (new HighFeature (offset: -i));
+            AddFeature (new LowFeature (offset: -i));
+            AddFeature (new CloseFeature (offset: -i));
         }
     }
 
-    int GetClass(CandleDataList candleDataList, int index) {
-        Candle c = candleDataList.GetCandle(index + 1);
-        Candle c1 = candleDataList.GetCandle(index);
+    protected override int GetClass (CandleDataList candleDataList, int index) {
+        Candle c = candleDataList.GetCandle (index + 1);
+        Candle c1 = candleDataList.GetCandle (index);
 
         // c : c1 = x : 100
-        // ´ÙÀ½³¯ 20% ÀÌ»ó »ó½ÂÀÌ¸é 1¸¦ ¸®ÅÏÇÑ´Ù.
-        double x = c.Close * 100 / c1.Close;
+        // ë‹¤ìŒë‚  20% ì´ìƒ ìƒìŠ¹ì´ë©´ 1ë¥¼ ë¦¬í„´í•œë‹¤.
+        double x = (c.Close / c1.Close) * 100;
 
-        if(20 < x) {
+        if (125 < x) {
             return 1;
         } else {
             return 0;
@@ -44,8 +56,8 @@ class Model_100 : ClassModel {
     }
 }
 ```
-model_100.cs ÆÄÀÏÀÌ¸§À¸·Î ÀúÀåÇÕ´Ï´Ù.
-ÀÌÁ¦ ÈÆ·ÃÀ» ½ÃÄÑº¸°Ú½À´Ï´Ù.
+model_100.cs íŒŒì¼ì´ë¦„ìœ¼ë¡œ ì €ìž¥í•©ë‹ˆë‹¤.
+ì´ì œ í›ˆë ¨ì„ ì‹œì¼œë³´ê² ìŠµë‹ˆë‹¤.
 ```
 dftrainer --source ./Model_100.cs
 ```
@@ -57,23 +69,23 @@ public enum CandleDataType
     Open, High, Low, Close, AvgPrice, Ratio, Volume, Amount
 }
 ```
-Æ¯¼ºµéÀº ´ÙÀ½°ú °°½À´Ï´Ù.
+íŠ¹ì„±ë“¤ì€ ë‹¤ìŒê³¼ ê°™ìŠµë‹ˆë‹¤.
 
-* OpenFeature(int offset) : ½Ã°¡
-* HighFeature(int offset) : °í°¡
-* LowFeature(int offset) : Àú°¡
-* CloseFeature(int offset) : Á¾°¡
-* VolumeFeature(int offset) : °Å·¡·®
-* AccmBuyCountFeature(int offset) : ´©Àû ¸Å¼ö·®(ÀÏ µ¥ÀÌÅ¸¸¸ Á¦°ø)
-* AccmSelCountFeature(int offset) : ´©Àû ¸Åµµ·®(ÀÏ µ¥ÀÌÅ¸¸¸ Á¦°ø)
-* StockCountFeature(int offset) : ÁÖ½Ä¼ö
-* ForeignCountFeature(int offset) : ¿Ü±¹ÀÎ º¸À¯ ¼ö·®
-* ForeignRatioFeature(int offset) : ¿Ü±¹ÀÎ º¸À¯ ºñÀ²
-* OrganBuyCountFeature(int offset) : ±â°ü ¸Å¼ö ¼ö·®
-* OrganAccmBuyCountFeature(int offset) : ±â°ü ´©Àû ¼ö·®
-* VolumeRatioFeature(int offset) : °Å·¡·® 
+* OpenFeature(int offset) : ì‹œê°€
+* HighFeature(int offset) : ê³ ê°€
+* LowFeature(int offset) : ì €ê°€
+* CloseFeature(int offset) : ì¢…ê°€
+* VolumeFeature(int offset) : ê±°ëž˜ëŸ‰
+* AccmBuyCountFeature(int offset) : ëˆ„ì  ë§¤ìˆ˜ëŸ‰(ì¼ ë°ì´íƒ€ë§Œ ì œê³µ)
+* AccmSelCountFeature(int offset) : ëˆ„ì  ë§¤ë„ëŸ‰(ì¼ ë°ì´íƒ€ë§Œ ì œê³µ)
+* StockCountFeature(int offset) : ì£¼ì‹ìˆ˜
+* ForeignCountFeature(int offset) : ì™¸êµ­ì¸ ë³´ìœ  ìˆ˜ëŸ‰
+* ForeignRatioFeature(int offset) : ì™¸êµ­ì¸ ë³´ìœ  ë¹„ìœ¨
+* OrganBuyCountFeature(int offset) : ê¸°ê´€ ë§¤ìˆ˜ ìˆ˜ëŸ‰
+* OrganAccmBuyCountFeature(int offset) : ê¸°ê´€ ëˆ„ì  ìˆ˜ëŸ‰
+* VolumeRatioFeature(int offset) : ê±°ëž˜ëŸ‰ 
 
-+ BBandFeature(CandleDataType candleDataType, int period, int dev) : º¼¸°Àú¹êµå
++ BBandFeature(CandleDataType candleDataType, int period, int dev) : ë³¼ë¦°ì €ë°´ë“œ
 + CciFeature(int period, int offset) : CCI
 + MacdFeature(int optInFastPeriod, int optInSlowPeriod, int optInSignalPeriod, int offset) : Macd
 + ObvFeature(int offset) : Obv

@@ -19,7 +19,7 @@ class MyModel : ClassModel {
 
     public MyModel () : base (100) {
         this.Title = "MyModel";
-        this.Desc = "MyModel 100";
+        this.Desc = "과거 60일 시.고.저.종.거래량을 이용하여 다음날 20% 이상 상승한 종목들을 훈련시킨다.";
 
         this.PeriodType = CandlePeriodType.D;
 

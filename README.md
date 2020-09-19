@@ -5,6 +5,9 @@
 
 ## Install
 
+DFINDER_BIN 환경변수를 설정합니다.
+DFINDER_DATA 환경변수를 설정합니다.
+
 ## Tutorial
 
 메모장이나 선호하는 에디터를 이용하여 아래 코드를 작성합니다.

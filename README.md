@@ -59,7 +59,7 @@ class MyModel : ClassModel {
 model_100.cs 파일이름으로 저장합니다.
 이제 훈련을 시켜보겠습니다.
 ```
-dftrainer --source ./Model_100.cs
+dftrainer Model_100.cs Model_100
 ```
 
 

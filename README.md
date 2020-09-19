@@ -5,8 +5,8 @@
 
 ## Install
 
-DFINDER_BIN 환경변수를 설정합니다.
-DFINDER_DATA 환경변수를 설정합니다.
+DFINDER_BIN 환경변수를 설정합니다. - 실행파일이 있는 
+DFINDER_DATA 환경변수를 설정합니다. - 데이터가 저장될 폴더
 
 ## Tutorial
 

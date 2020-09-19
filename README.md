@@ -13,6 +13,17 @@ bin 폴더를 PATH 환경변수에 등록합니다.
 
 ## Tutorial
 
+훈련용 데이타 DB를 받기 위해 아래 명령을 실행합니다.
+
+dfdata
+
+C:\temp>dfdata
+
+전체 498M 중 498M 수신중.
+D:\dev\github\primespace\data\candle_202004170000.db 훈련용 데이터 다운로드 완료.
+해쉬값은 a483f4e6641247a5f5608b550ec6fa42 입니다.
+
+
 메모장이나 선호하는 에디터를 이용하여 아래 코드를 작성합니다.
 
 

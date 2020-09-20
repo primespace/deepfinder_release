@@ -5,7 +5,26 @@
 
 ## Install
 
+DFINDER_BIN 환경변수를 설정합니다. - 실행파일이 있는 
+DFINDER_DATA 환경변수를 설정합니다. - 데이터가 저장될 폴더
+
+bin 폴더를 PATH 환경변수에 등록합니다.
+
+
 ## Tutorial
+
+훈련용 데이타 DB를 받기 위해 아래 명령을 실행합니다.
+
+dfdata
+
+C:\temp>dfdata
+
+전체 498M 중 498M 수신중.
+D:\dev\github\primespace\data\candle_202004170000.db 훈련용 데이터 다운로드 완료.
+해쉬값은 a483f4e6641247a5f5608b550ec6fa42 입니다.
+
+데이터가 완료되면 훈련을 위한 모델 코드를 작성합니다.
+
 
 메모장이나 선호하는 에디터를 이용하여 아래 코드를 작성합니다.
 
@@ -59,7 +78,7 @@ class MyModel : ClassModel {
 model_100.cs 파일이름으로 저장합니다.
 이제 훈련을 시켜보겠습니다.
 ```
-dftrainer --source ./Model_100.cs
+dftrainer Model_100.cs Model_100
 ```
 
 
